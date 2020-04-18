@@ -11,6 +11,8 @@ public class User {
 
     private String mobilenumber;
 
+    private Integer role;
+
     public Integer getUserid() {
         return userid;
     }
@@ -49,5 +51,13 @@ public class User {
 
     public void setMobilenumber(String mobilenumber) {
         this.mobilenumber = mobilenumber == null ? null : mobilenumber.trim();
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 }

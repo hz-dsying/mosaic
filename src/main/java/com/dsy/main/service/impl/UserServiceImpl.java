@@ -1,0 +1,30 @@
+package com.dsy.main.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dsy.main.dao.UserMapper;
+import com.dsy.main.pojo.User;
+import com.dsy.main.pojo.UserExample;
+import com.dsy.main.service.UserService;
+import com.dsy.main.util.LoginException;
+
+@Service
+public class UserServiceImpl implements UserService {
+	@Autowired
+	private UserMapper userMapper;
+
+	@Override
+	public User findByUsernameAndPwd(String username, String password) {
+		UserExample example = new UserExample();
+		example.createCriteria().andUsernameEqualTo(username).andPasswordEqualTo(password);
+		List<User> list = userMapper.selectByExample(example);
+		if(list != null && list.size() > 0) {
+			return list.get(0);
+		}else {
+			throw new LoginException("用户名/密码错误");
+		}
+	}
+}

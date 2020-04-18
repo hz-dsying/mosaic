@@ -48,5 +48,9 @@
 		<table tableName="album" domainObjectName="Album"></table>
 		<table tableName="comment" domainObjectName="Comment"></table>
 		<table tableName="role" domainObjectName="Role"></table>
+		<table tableName="song_album" domainObjectName="SongAlbum"></table>
+		<table tableName="song_likes" domainObjectName="SongLikes"></table>
+		<table tableName="user_comment_likes" domainObjectName="UserCommentLikes"></table>
+		<table tableName="user_role" domainObjectName="UserRole"></table>
 	</context>
 </generatorConfiguration>
