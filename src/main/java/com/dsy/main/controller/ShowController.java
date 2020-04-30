@@ -10,6 +10,10 @@ public class ShowController {
 		return "register";
 	}
 	
+	@RequestMapping("/toChangePwd")
+	public String toChangePwd() {
+		return "changePwd";
+	}
 	
 	
 }

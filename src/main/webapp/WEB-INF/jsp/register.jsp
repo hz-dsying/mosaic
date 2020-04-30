@@ -111,7 +111,7 @@
 					</div>
 					<div class="login-agileits-bottom">
 						<h6>
-							<a href="#">修改密码</a>
+							<a href="${pageContext.request.contextPath}/toChangePwd">修改密码</a>
 						</h6>
 					</div>
 				</div>

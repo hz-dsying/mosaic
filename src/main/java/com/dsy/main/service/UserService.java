@@ -45,6 +45,19 @@ public interface UserService {
 	 * @return
 	 */
 	List<User> queryAllUser();
+
+	/**
+	 * 删除用户
+	 * @param userid
+	 */
+	void deleteById(Integer userid);
+
+	/**
+	 * 根据用户名模糊查找用户
+	 * @param username
+	 * @return
+	 */
+	List<User> selectByName(String username);
 	
 
 }

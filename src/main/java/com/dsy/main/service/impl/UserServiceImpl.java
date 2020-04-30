@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void addUser(User user) {
 		userMapper.insert(user);
+//		userMapper.insertSelective(user);
 		
 	}
 
@@ -66,6 +67,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> queryAllUser() {
 		UserExample example = new UserExample();
+		List<User> list = userMapper.selectByExample(example);
+		return list;
+	}
+
+	@Override
+	public void deleteById(Integer userid) {
+		userMapper.deleteByPrimaryKey(userid);
+	}
+
+	@Override
+	public List<User> selectByName(String username) {
+		UserExample example = new UserExample();
+		example.createCriteria().andUsernameLike(username);
 		List<User> list = userMapper.selectByExample(example);
 		return list;
 	}

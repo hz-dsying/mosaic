@@ -55,6 +55,19 @@
 					<p>欢迎访问MOSAIC音乐分享平台</p>
 				</div>
 			</div>
+			
+		<div class="register-right">
+				<div class="register-in">
+					<a class="book popup-with-zoom-anim button-isi zoomIn animated"
+						data-wow-delay=".5s" href="#small-dialog">Change Password </a>
+				</div>
+				<div class="register-in">
+					<a data-wow-delay=".5s" href="${pageContext.request.contextPath}/toLogin">Return Login </a>
+				</div>
+
+
+			</div>	
+			
 		</div>
 	</section>
 	<!-- //section -->
@@ -65,22 +78,19 @@
 
 			<div class="login-form login-form-left">
 				<div class="agile-row">
-					<h3>Login to your site</h3>
+					<h3>Change Password</h3>
 					<span class="fa fa-lock"></span>
 					<div class="clear"></div>
 					<div class="login-agileits-top">
-						<form action="${pageContext.request.contextPath}/login" method="post">
+						<form action="${pageContext.request.contextPath}/changePwd" method="post" id="regForm">
 							<input type="hidden" name="method" value="login" >
-							<input type="text" class="name" name="username" Placeholder="Username" required="" /> 
+							<input type="text" class="name" name="username" Placeholder="Username" required="" id="username" /> 
 							<input type="password" class="password" name="password" Placeholder="Password" required="" /> 
-							<input type="submit" value="Login">
+							<input type="password" class="rePassword" name="rePassword" Placeholder="rePassword" required="" /> 
+							<input type="submit" value="提交">
 						</form>
 					</div>
-					<div class="login-agileits-bottom">
-						<h6>
-							<a href="#">修改密码</a>
-						</h6>
-					</div>
+
 				</div>
 			</div>
 
@@ -117,14 +127,15 @@
 	<script type="text/javascript">
 		$(function() {
 			// 自定义校验规则
-			$.validator.addMethod("checkUser",
+			$.validator.addMethod("checkUserPwd",
 					function(value, element, params) {
 						var pass = false;
 						// value：输入内容，需要给数据库对比
 						$.ajax({
-							url : "${pageContext.request.contextPath}/checkUsername",
+							url : "${pageContext.request.contextPath}/checkUser",
 							data : {
-								"username" : value
+								"username" : $("#username").val(),
+								"password" : value
 							},
 							success : function(data) {
 								// data.msg==null -> true -> 校验通过
@@ -140,12 +151,13 @@
 			$("#regForm").validate({
 				rules : {
 					username : {
-						required : true,
-						minlength : 3,
-						maxlength : 12,
-						checkUser : true
+						required : true
 					},
 					password : {
+						required : true,
+						checkUserPwd : true
+					},
+					rePassword : {
 						required : true,
 						minlength : 6,
 						maxlength : 20
@@ -154,12 +166,13 @@
 				},
 				messages : {
 					username : {
-						required : "用户名不能为空",
-						minlength : "用户名长度不能小于3",
-						maxlength : "用户名长度不能大于12",
-						checkUser : "用户名已存在"
+						required : "用户名不能为空"
 					},
 					password : {
+						required : "密码不能为空",
+						checkUserPwd : "用户名/密码错误"
+					},
+					rePassword : {
 						required : "密码不能为空",
 						minlength : "密码长度不能小于6",
 						maxlength : "密码长度不能大于20"
