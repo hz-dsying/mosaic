@@ -1,7 +1,6 @@
 package com.dsy.main.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +20,7 @@ import com.dsy.main.service.SongLikesService;
 import com.dsy.main.service.UserCommentLikesService;
 import com.dsy.main.service.UserRoleService;
 import com.dsy.main.service.UserService;
+import com.dsy.main.util.PageBean;
 
 @Controller
 public class UserController {
@@ -57,6 +57,7 @@ public class UserController {
 			// 普通用户和会员跳转首页
 //			return "genres";
 			return "redirect:/listAlbum";
+//			return "redirect:/toGenres";
 		}
 	}
 	
@@ -132,15 +133,20 @@ public class UserController {
 	 * @throws IOException 
 	 */
 	@RequestMapping("/listUser")
-	public String listUser(String username, HttpSession session) throws IOException {
-		List<User> list = new ArrayList<>();
+	public String listUser(String username, Integer currentPage, Integer pageSize, HttpSession session) throws IOException {
 		if(username != null) {
-			username = new String(username.getBytes("ISO-8859-1"), "utf-8");
-			list = userService.selectByName(username);
+			username = "%" + username + "%";
 		} else {
-			list = userService.queryAllUser();
+			username = "%%";
 		}
-		session.setAttribute("list", list);
+		if(currentPage==null) {
+        	currentPage=1;
+        }
+		if(pageSize==null) {
+			pageSize=5;
+        }
+		PageBean<User> pageBean = userService.findPageBean(username, currentPage, pageSize);
+		session.setAttribute("pageBean", pageBean);
 		return "user/list";
 	}
 	

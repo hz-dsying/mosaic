@@ -106,7 +106,7 @@ A.active {
 			<TBODY>
 				<TR>
 					<TD width=15><IMG src="images/new_005.jpg" border=0></TD>
-					<TD align=middle width=180 background=images/new_006.jpg height=35><B>人力资源
+					<TD align=middle width=180 background=images/new_006.jpg height=35><B>后台管理
 							－功能菜单</B></TD>
 					<TD width=15><IMG src="images/new_007.jpg" border=0></TD>
 				</TR>
@@ -138,7 +138,7 @@ A.active {
 												</TR>
 												<TR>
 													<TD class=menuSmall><A class=style2
-														href="${pageContext.request.contextPath}/UserAction_list" target=main>－ 评论管理</A></TD>
+														href="${pageContext.request.contextPath}/listComment" target=main>－ 评论管理</A></TD>
 												</TR>
 
 											</TBODY>

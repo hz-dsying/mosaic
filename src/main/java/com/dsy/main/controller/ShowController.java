@@ -10,10 +10,37 @@ public class ShowController {
 		return "register";
 	}
 	
+	@RequestMapping("/toGenres")
+	public String toGenres() {
+		return "genres";
+	}
+	
 	@RequestMapping("/toChangePwd")
 	public String toChangePwd() {
 		return "changePwd";
 	}
+	
+	@RequestMapping("/manageIndex")
+	public String manageIndex() {
+		return "manageIndex";
+	}
+	
+	@RequestMapping("/top")
+	public String totop() {
+		return "top";
+	}
+	
+	@RequestMapping("/menu")
+	public String tomenu() {
+		return "menu";
+	}
+	
+	@RequestMapping("/welcome")
+	public String towelcome() {
+		return "welcome";
+	}
+	
+
 	
 	
 }

@@ -23,7 +23,7 @@ public interface SongService {
 	 * @param type
 	 * @return
 	 */
-	PageBean listSongsByType(String currentPage, String pageSize, String type);
+	PageBean<Song> listSongsByType(String currentPage, String pageSize, String type);
 
 	/**
 	 * 根据歌名模糊查询
@@ -44,4 +44,22 @@ public interface SongService {
 	 */
 	void deleteById(Integer songid);
 
+	/**
+	 * 后台管理分页查询歌曲
+	 * @param songname
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	PageBean<Song> findPageBean(String songname, Integer currentPage, Integer pageSize);
+
+	/**
+	 * 收藏歌曲分页查询
+	 * @param currentPage
+	 * @param pageSize
+	 * @param ids
+	 * @return
+	 */
+	PageBean<Song> listLikeSongsByPage(String currentPage, String pageSize, List<Integer> ids);
+	
 }

@@ -25,7 +25,7 @@ public class AlbumController {
 	public String listAlbum(HttpSession session) {
 		List<Album> list = albumService.queryAllAlbum();
 		session.setAttribute("albumList", list);
-		return "genres";
+		return "redirect:/toGenres";
 	}
 
 }

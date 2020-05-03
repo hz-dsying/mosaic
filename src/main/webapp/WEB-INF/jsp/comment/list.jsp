@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<TITLE>歌曲列表</TITLE>
+<TITLE>评论列表</TITLE>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <LINK href="${pageContext.request.contextPath }/css/Style_M.css"
 	type=text/css rel=stylesheet>
@@ -34,7 +34,7 @@
 </HEAD>
 <BODY>
 	<FORM id="customerForm" name="customerForm"
-		action="${pageContext.request.contextPath }/listSongs" method=post>
+		action="${pageContext.request.contextPath }/listComment" method=post>
 
 		<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0>
 			<TBODY>
@@ -61,7 +61,7 @@
 					<TD vAlign=top width="100%" bgColor=#ffffff>
 						<TABLE cellSpacing=0 cellPadding=5 width="100%" border=0>
 							<TR>
-								<TD class=manageHead>当前位置：后台管理 &gt; 歌曲列表</TD>
+								<TD class=manageHead>当前位置：后台管理 &gt; 评论列表</TD>
 							</TR>
 							<TR>
 								<TD height=2></TD>
@@ -96,19 +96,21 @@
 												<TR
 													style="FONT-WEIGHT: bold; FONT-STYLE: normal; BACKGROUND-COLOR: #eeeeee; TEXT-DECORATION: none">
 													<TD>歌曲名</TD>
-													<TD>歌手</TD>
-													<TD>歌曲地址</TD>
+													<TD>用户名</TD>
+													<TD>评论</TD>
+													<TD>评论点赞数</TD>
 													<TD>操作</TD>
 												</TR>
-												<c:forEach items="${pageBean.list }" var="song">
+												<c:forEach items="${pageBean.list }" var="comment">
 													<TR
 														style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">
-														<TD>${song.songname }</TD>
-														<TD>${song.singer }</TD>
-														<TD>${song.songurl }</TD>
+														<TD>${comment.song.songname }</TD>
+														<TD>${comment.user.username }</TD>
+														<TD>${comment.commentcontent }</TD>
+														<TD>${comment.likescount }</TD>
 														<TD>
 															&nbsp;&nbsp; 
-															<a href="${pageContext.request.contextPath }/deleteSong?songid=${song.songid}">删除</a>
+															<a href="${pageContext.request.contextPath }/deleteComment?commentid=${comment.commentid}">删除</a>
 														</TD>
 													</TR>
 
@@ -126,8 +128,8 @@
 												共[<B>${pageBean.totalCount}</B>]条记录,
 												[<B id="totalPage">${pageBean.totalPage}</B>]页 ,每页显示 
 												<select name="pageSize">
-													<option value="15" <c:if test="${pageBean.pageSize==15 }">selected</c:if> >15</option>
-													<option value="30" <c:if test="${pageBean.pageSize==30 }">selected</c:if> >30</option>
+													<option value="10" <c:if test="${pageBean.pageSize==10 }">selected</c:if> >10</option>
+													<option value="20" <c:if test="${pageBean.pageSize==20 }">selected</c:if> >20</option>
 												</select>
 												条
 												[<A href="javascript:go(-1)">前一页</A>]

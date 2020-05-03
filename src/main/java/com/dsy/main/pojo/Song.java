@@ -50,4 +50,10 @@ public class Song {
     public void setSinger(String singer) {
         this.singer = singer == null ? null : singer.trim();
     }
+
+	@Override
+	public String toString() {
+		return "Song [songname=" + songname + ", singer=" + singer + "]";
+	}
+    
 }

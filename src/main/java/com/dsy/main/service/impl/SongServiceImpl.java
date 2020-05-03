@@ -2,7 +2,6 @@ package com.dsy.main.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,20 +36,28 @@ public class SongServiceImpl implements SongService {
 	@Override
 	public List<Song> searchSongByWord(String word) {
 		SongExample example = new SongExample();
-		example.createCriteria().andSongnameLike(word);
+		
+		String songname = word;
+		example.createCriteria().andSongnameLike(songname);
 		List<Song> list1 = songMapper.selectByExample(example);
 		
 		example.clear();
-		example.createCriteria().andSingerLike(word);
-		List<Song> list2 = songMapper.selectByExample(example);
+		String singer = word;
+		example.createCriteria().andSingerLike(singer);
+		List<Song> list2 = songMapper.selectByExample(example );
 		
 		list1.addAll(list2);
-		List<Song> list = new ArrayList<Song>(new TreeSet<Song>(list1)); 
+		List<Song> list = new ArrayList<Song>();
+		for(Song s : list1) {
+			if(!list.contains(s)) {
+				list.add(s);
+			}
+		}
 		return list;
 	}
 
 	@Override
-	public PageBean listSongsByType(String currentPageStr, String pageSizeStr, String type) {
+	public PageBean<Song> listSongsByType(String currentPageStr, String pageSizeStr, String type) {
 		int currentPage = 0;
 		int pageSize = 0;
 		if (currentPageStr == null) {
@@ -110,6 +117,44 @@ public class SongServiceImpl implements SongService {
 		pb.setList(list);
 		return pb;
 	}
+	
+	@Override
+	public PageBean<Song> listLikeSongsByPage(String currentPageStr, String pageSizeStr, List<Integer> ids) {
+		int currentPage = 0;
+		int pageSize = 0;
+		if (currentPageStr == null) {
+			currentPage = 1;
+		} else {
+			currentPage = Integer.valueOf(currentPageStr);
+		}
+		if (pageSizeStr == null) {
+			pageSize = 18;
+		} else {
+			pageSize = Integer.valueOf(pageSizeStr);
+		}
+		// 获得总数
+		SongExample example = new SongExample();
+		example.createCriteria().andSongidIn(ids);
+		int totalCount = (int) songMapper.countByExample(example);
+		// 获得歌曲list
+		List<Song> sl = songMapper.selectByExample(example);
+		
+		if(currentPage < 1) {
+			currentPage = 1;
+		}
+		if((currentPage -1) * pageSize > sl.size()) {
+			currentPage = currentPage -1;
+		}
+		int m = currentPage * pageSize;
+		if(m > sl.size()) {
+			m = sl.size();
+		}
+		List<Song> list = sl.subList((currentPage-1) * pageSize, m);
+		
+		PageBean<Song> pb = new PageBean<Song>(totalCount, currentPage, pageSize);
+		pb.setList(list);
+		return pb;
+	}
 
 	@Override
 	public List<Song> searchSongBySongname(String songname) {
@@ -131,5 +176,28 @@ public class SongServiceImpl implements SongService {
 		songMapper.deleteByPrimaryKey(songid);
 		
 	}
+
+	@Override
+	public PageBean<Song> findPageBean(String songname, Integer currentPage, Integer pageSize) {
+		SongExample example = new SongExample();
+		// 1.通过数据库查询totalCount，所有的记录条数
+		example.createCriteria().andSongnameLike(songname);
+		int totalCount = (int) songMapper.countByExample(example);
+		// 2.创建PageBean对象
+		PageBean<Song> pb = new PageBean<Song>(totalCount, currentPage, pageSize);
+		// 3.查询用户列表
+		List<Song> list = songMapper.selectByExample(example);
+		int m = currentPage * pageSize;
+		if(m > list.size()) {
+			m = list.size();
+		}		
+		List<Song> list2 = list.subList((currentPage-1) * pageSize, m);
+		// 4.将list拼接到pageBean中
+		pb.setList(list2);
+		// 5.返回完整的pageBean对象
+		return pb;
+	}
+
+	
 
 }

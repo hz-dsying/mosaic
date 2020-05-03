@@ -13,12 +13,20 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.11.0.min.js"></script>
 <SCRIPT language=javascript>
-	function to_page(page) {
-		if (page) {
-			$("#page").val(page);
+	function go(val) {
+		// 改变currentPage
+		$("#currentPage").val(parseInt($("#currentPage").val())+val);
+		var currentPage = parseInt($("#currentPage").val());
+		var totalPage = parseInt($("#totalPage").text());
+		// 判断页数有没有超过范围
+		if (currentPage <= 0) { 
+			$("#currentPage").val(1);
 		}
-		document.customerForm.submit();
-
+		if (currentPage > totalPage) { 
+			$("#currentPage").val(totalPage);
+		}
+		// 提交表单
+		$("#customerForm").submit();
 	}
 </SCRIPT>
 
@@ -93,7 +101,7 @@
 													<TD>用户权限</TD>
 													<TD>操作</TD>
 												</TR>
-												<c:forEach items="${list }" var="user">
+												<c:forEach items="${pageBean.list }" var="user">
 													<TR
 														style="FONT-WEIGHT: normal; FONT-STYLE: normal; BACKGROUND-COLOR: white; TEXT-DECORATION: none">
 														<TD>${user.username }</TD>
@@ -121,20 +129,21 @@
 									<TD><SPAN id=pagelink>
 											<DIV
 												style="LINE-HEIGHT: 20px; HEIGHT: 20px; TEXT-ALIGN: right">
-												共[<B>${total}</B>]条记录,[<B>${totalPage}</B>]页 ,每页显示 
+												共[<B>${pageBean.totalCount}</B>]条记录,
+												[<B id="totalPage">${pageBean.totalPage}</B>]页 ,每页显示 
 												<select name="pageSize">
-													<option value="15">1</option>
-													<option value="30" >30</option>
+													<option value="3" <c:if test="${pageBean.pageSize==3 }">selected</c:if> >3</option>
+													<option value="5" <c:if test="${pageBean.pageSize==5 }">selected</c:if> >5</option>
 												</select>
 												条
-												[<A href="javascript:to_page(${page-1})">前一页</A>]
-												<B>${page}</B>
-												[<A href="javascript:to_page(${page+1})">后一页</A>] 
+												[<A href="javascript:go(-1)">前一页</A>]
+												<B>${pageBean.currentPage}</B>
+												[<A href="javascript:go(1)">后一页</A>] 
 												到
-												<input type="text" size="3" id="page" name="page" />
+												<input type="text" size="3" id="currentPage" name="currentPage" value="${pageBean.currentPage}" />
 												页
 												
-												<input type="button" value="Go" onclick="to_page()"/>
+												<input type="button" value="Go" onclick="go(0)"/>
 											</DIV>
 									</SPAN></TD>
 								</TR>

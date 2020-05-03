@@ -71,6 +71,8 @@
 						</a></li>
 						<li class="hidden-xs"><a href="#"> <span>欢迎您</span>
 						</a></li>
+						<li class="hidden-xs"><a href="${pageContext.request.contextPath}/toLogin"> <span>安全退出</span>
+						</a></li>
 					</c:if>
 				</ul>
 			</div>
@@ -89,11 +91,18 @@
 											<div
 												class="list-group no-radius no-border no-bg m-t-n-xxs m-b-none auto">
 												<form action="${pageContext.request.contextPath }/listSong" >
+													<input type="hidden" name="userid" value="${user.userid}">
 													<!-- <input type="hidden" name="method" value="songType"> -->
 													<a href="${pageContext.request.contextPath }/listSong">
 														<button name="type" value="所有歌曲" class="list-group-item"
 															style="width: 100%">所有歌曲</button>
 													</a> 
+													<c:if test="${!empty user}">
+														<a href="${pageContext.request.contextPath }/listSong">
+															<button name="type" value="我的收藏" class="list-group-item"
+																style="width: 100%">我的收藏</button>
+														</a> 
+													</c:if>
 													<c:forEach items="${albumList}" var="album">
 														<a href="${pageContext.request.contextPath }/listSong">
 															<button name="type" value="${album.albumname }" class="list-group-item"
@@ -129,15 +138,15 @@
 																			class="fa fa-play-circle i-2x"></i></a>
 																	</div>
 																</div>
-																<a href="track-detail.html"><img
+																<a href="${pageContext.request.contextPath }/songDetail?songid=${song.songid}"><img
 																	src="${pageContext.request.contextPath }/img/${song.imgurl }"
 																	alt="" class="r r-2x img-full" style="height: 300px"></a>
 															</div>
 															<div class="padder-v">
-																<a href="track-detail.html" data-bjax
+																<a href="#" data-bjax
 																	data-target="#bjax-target" data-el="#bjax-el"
 																	data-replace="true" class="text-ellipsis">${song.songname }</a>
-																<a href="track-detail.html" data-bjax
+																<a href="#" data-bjax
 																	data-target="#bjax-target" data-el="#bjax-el"
 																	data-replace="true"
 																	class="text-ellipsis text-xs text-muted">${song.singer }</a>
@@ -145,14 +154,14 @@
 														</div>
 													</div>
 												</c:forEach>
+											</div>	
 												<div style="float:none;width:500px"  class="col-xs-6 col-sm-4 col-md-3 col-lg-2" >
-												
 											<ul class="pagination pagination">
-						                        <li><a href="${pageContext.request.contextPath }/listFormerSong?currentPage=${currentPage}&type=${type}"><i class="fa fa-chevron-left"></i></a></li>
+						                        <li><a href="${pageContext.request.contextPath }/listFormerSong?currentPage=${currentPage}&type=${type}&userid=${user.userid}"><i class="fa fa-chevron-left"></i></a></li>
 						                        <c:forEach begin="1" end="${pageBean.totalPage }" step="1" var="i">
-						                        <li><a href="${pageContext.request.contextPath }/listSong?currentPage=${i}&type=${type}">${i }</a></li>
+						                        <li><a href="${pageContext.request.contextPath }/listSong?currentPage=${i}&type=${type}&userid=${user.userid}">${i }</a></li>
 												</c:forEach>
-						                        <li><a href="${pageContext.request.contextPath }/listNextSong?currentPage=${currentPage}&type=${type}"><i class="fa fa-chevron-right"></i></a></li>
+						                        <li><a href="${pageContext.request.contextPath }/listNextSong?currentPage=${currentPage}&type=${type}&userid=${user.userid}"><i class="fa fa-chevron-right"></i></a></li>
 						                      </ul>
 												
 												</div>
@@ -180,88 +189,7 @@
 	<script type="text/javascript"
 		src="js/jPlayer/add-on/jplayer.playlist.min.js"></script>
 	<script type="text/javascript">	
-	$(document).ready(function(){
-		/* var song = ${song}; */
-		
-		/* var tempTitle = "${song.name}";
-		var tempArtist = "${song.artist}";
-		var tempMp3 = "${pageContext.request.contextPath}${song.songurl}";
-		var tempPoster = "${pageContext.request.contextPath}${song.imgurl}";  */
-		
-		var songList = ${songList};
-		console.log(songList);
-		
-  	myPlaylist = new jPlayerPlaylist({
-    jPlayer: "#jplayer_N",
-    cssSelectorAncestor: "#jp_container_N"
-  },  /* [
-    {
-      title:"I'm Yours.mp3",
-      artist:"Jason Mraz",
-      mp3:"music/Jason Mraz - I'm Yours.mp3",
-      poster: "images/m0.jpg"
-    },
-    {
-      title:"${song.name}",
-      artist:"${song.artist}",
-      mp3:"${pageContext.request.contextPath}${song.songurl}",
-      poster: "${pageContext.request.contextPath}${song.imgurl}"
-    } 
-  ]  */
-  eval(songList)
-  , {
-    playlistOptions: {
-      enableRemoveControls: true,
-      autoPlay: false
-    },
-    swfPath: "js/jPlayer",
-    supplied: "webmv, ogv, m4v, oga, mp3",
-    smoothPlayBar: true,
-    keyEnabled: true,
-    audioFullScreen: false
-  });
-  
-  $(document).on($.jPlayer.event.pause, myPlaylist.cssSelector.jPlayer,  function(){
-    $('.musicbar').removeClass('animate');
-    $('.jp-play-me').removeClass('active');
-    $('.jp-play-me').parent('li').removeClass('active');
-  });
 
-  $(document).on($.jPlayer.event.play, myPlaylist.cssSelector.jPlayer,  function(){
-    $('.musicbar').addClass('animate');
-  });
-
-  $(document).on('click', '.jp-play-me', function(e){
-    e && e.preventDefault();
-    var $this = $(e.target);
-    if (!$this.is('a')) $this = $this.closest('a');
-
-    $('.jp-play-me').not($this).removeClass('active');
-    $('.jp-play-me').parent('li').not($this.parent('li')).removeClass('active');
-
-    $this.toggleClass('active');
-    $this.parent('li').toggleClass('active');
-    if( !$this.hasClass('active') ){
-      myPlaylist.pause();
-    }else{
-      var i = Math.floor(Math.random() * (1 + 7 - 1));
-      myPlaylist.play(i);
-    }
-    
-  });
-  
- /*  var tempTitle = "${song.name}";
-	var tempArtist = "${song.artist}";
-	var tempMp3 = "${pageContext.request.contextPath}${song.songurl}";
-	var tempPoster = "${pageContext.request.contextPath}${song.imgurl}"; */
- /*  myPlaylist.add({ 
-		title:tempTitle, 
-		artist:tempArtist, 
-		mp3:tempMp3, 
-		poster: tempPoster 
-		});  */
-
-});
 	</script>	
 	<script type="text/javascript">
 								$(function(){
@@ -284,23 +212,7 @@
 											},
 											"json"
 										);
-										/* $.get(
-												"${pageContext.request.contextPath}/FindSongBySongArtistNameServlet",
-												{
-													"word": $("#word").val()
-												},
-												function(data){
-													$("#list").empty();
-													for (var i = 0 ;i < data.length; i++) {
-														if ( i > 7) {
-															break;
-														}
-														$("#list").append("<a href='${pageContext.request.contextPath }/AddSongServlet?songid="+data[i].songid+"' ><div style='cursor:pointer' onmouseover='over(this)' onmouseout='out(this)' onclick='go(this)'>"+data[i].name+"</div></a>");
-													}
-													$("#list").css("display", "block");
-												},
-												"json"
-											);*/
+
 									}); 
 								});
 								function over(obj) {

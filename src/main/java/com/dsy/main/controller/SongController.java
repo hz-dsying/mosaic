@@ -19,7 +19,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dsy.main.pojo.Comment;
 import com.dsy.main.pojo.Song;
+import com.dsy.main.pojo.SongLikesKey;
 import com.dsy.main.pojo.User;
 import com.dsy.main.service.CommentService;
 import com.dsy.main.service.SongAlbumService;
@@ -97,6 +99,34 @@ public class SongController {
 	}
 	
 	/**
+	 * 用户“我喜欢”歌曲列表显示
+	 * @param userid
+	 * @param request
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/listLikeSong")
+	public String listLikeSong(Integer userid, HttpServletRequest request, HttpSession session) {
+		List<SongLikesKey> list = songLikesService.selectByUser(userid);
+		// 获得歌曲ids
+		List<Integer> ids = new ArrayList<>();
+		for(SongLikesKey s : list) {
+			ids.add(s.getSongid());
+		}
+		// 分页
+		String currentPage = request.getParameter("currentPage");
+		String pageSize = "18";
+		if(currentPage==null) {
+        	currentPage="1";
+        }
+		PageBean<Song> pb = songService.listLikeSongsByPage(currentPage, pageSize, ids);
+		session.setAttribute("currentPage", currentPage);
+		session.setAttribute("type", "我的收藏");
+		session.setAttribute("pageBean", pb);
+		return "genres";
+	}
+	
+	/**
 	 * 前台歌曲展示
 	 * @param word
 	 * @param request
@@ -114,7 +144,20 @@ public class SongController {
 		if(currentPage==null) {
         	currentPage="1";
         }
-		PageBean pb = songService.listSongsByType(currentPage, pageSize, type);
+		PageBean<Song> pb;
+		if(type.equals("我的收藏")) {
+			String userid = request.getParameter("userid");
+			List<SongLikesKey> list = songLikesService.selectByUser(Integer.valueOf(userid));
+			// 获得歌曲ids
+			List<Integer> ids = new ArrayList<>();
+			for(SongLikesKey s : list) {
+				ids.add(s.getSongid());
+			}
+			pb = songService.listLikeSongsByPage(currentPage, pageSize, ids);
+		} else {
+			pb = songService.listSongsByType(currentPage, pageSize, type);
+		}
+		
 		session.setAttribute("currentPage", currentPage);
 		session.setAttribute("type", type);
 		session.setAttribute("pageBean", pb);
@@ -137,7 +180,23 @@ public class SongController {
 		
 		String currentPage = Integer.toString(intcurrentPage-1);
 		String pageSize = "18";
-		PageBean pb = songService.listSongsByType(currentPage, pageSize, type);
+		
+		PageBean<Song> pb;
+		if(type.equals("我的收藏")) {
+			String userid = request.getParameter("userid");
+			List<SongLikesKey> list = songLikesService.selectByUser(Integer.valueOf(userid));
+			// 获得歌曲ids
+			List<Integer> ids = new ArrayList<>();
+			for(SongLikesKey s : list) {
+				ids.add(s.getSongid());
+			}
+			pb = songService.listLikeSongsByPage(currentPage, pageSize, ids);
+		} else {
+			pb = songService.listSongsByType(currentPage, pageSize, type);
+		}
+		
+		
+		
 		if(intcurrentPage==1) {
 			return "genres";
         }else{
@@ -164,7 +223,22 @@ public class SongController {
 		
 		String currentPage = Integer.toString(intcurrentPage+1);
 		String pageSize = "18";
-		PageBean pb = songService.listSongsByType(currentPage, pageSize, type);
+		
+		
+		PageBean<Song> pb;
+		if(type.equals("我的收藏")) {
+			String userid = request.getParameter("userid");
+			List<SongLikesKey> list = songLikesService.selectByUser(Integer.valueOf(userid));
+			// 获得歌曲ids
+			List<Integer> ids = new ArrayList<>();
+			for(SongLikesKey s : list) {
+				ids.add(s.getSongid());
+			}
+			pb = songService.listLikeSongsByPage(currentPage, pageSize, ids);
+		} else {
+			pb = songService.listSongsByType(currentPage, pageSize, type);
+		}
+		
 		if(intcurrentPage==pb.getTotalPage()) {
 			return "genres";
         }else{
@@ -184,9 +258,8 @@ public class SongController {
 	@ResponseBody
 	public void searchSong(String word, HttpServletResponse response) throws IOException {
 		word = new String(word.getBytes("ISO-8859-1"), "utf-8");
+		word = "%" + word + "%";
 		List<Song> list = songService.searchSongByWord(word);
-		System.out.println(word);
-		System.out.println(list);
 		Gson gson = new Gson();
 		String json = gson.toJson(list);
 		response.setContentType("text/plain;charset=utf-8");
@@ -201,15 +274,20 @@ public class SongController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/listSongs")
-	public String listSongs(String songname, HttpSession session) throws IOException {
-		List<Song> list = new ArrayList<>();
+	public String listSongs(String songname, Integer currentPage, Integer pageSize, HttpSession session) throws IOException {
 		if(songname != null) {
-			songname = new String(songname.getBytes("ISO-8859-1"), "utf-8");
-			list = songService.searchSongBySongname(songname);
+			songname = "%" + songname + "%";
 		} else {
-			list = songService.queryAllSong();
+			songname = "%%";
 		}
-		session.setAttribute("list", list);
+		if(currentPage==null) {
+        	currentPage=1;
+        }
+		if(pageSize==null) {
+			pageSize=15;
+        }
+		PageBean<Song> pageBean = songService.findPageBean(songname, currentPage, pageSize);
+		session.setAttribute("pageBean", pageBean);
 		return "song/list";
 	}
 	
@@ -218,11 +296,18 @@ public class SongController {
 	 * @param songid
 	 * @return
 	 */
-	@RequestMapping("deleteSong")
+	@RequestMapping("/deleteSong")
 	public String deleteSong(Integer songid) {
 		// 删除用户点赞评论表记录 user_comment_likes
-			// 获得该歌曲的评论
-		
+			// 1.获得该歌曲的评论
+		List<Comment> selectBySong = commentService.selectBySong(songid);
+			// 2.获得评论id列表
+		List<Integer> ids = new ArrayList<>();
+		for(Comment c : selectBySong) {
+			ids.add(c.getCommentid());
+		}
+			// 3.删除记录
+		userCommentLikesService.deleteByComment(ids);
 		// 删除该歌曲的评论 comment
 		commentService.deleteBySong(songid);
 		// 删除该用户收藏的歌曲 song_likes
@@ -235,12 +320,41 @@ public class SongController {
 		return "redirect:/listSongs";
 	}
 	
+	/**
+	 * 对歌曲进行收藏或取消收藏
+	 * @param userid
+	 * @param songid
+	 * @return
+	 */
+	@RequestMapping("/addOrDeleteLikeSong")
+	public String addOrDeleteLikeSong(Integer userid, Integer songid, HttpSession session) {
+		// 默认0，表示未收藏
+		int isCollect = 0;
+		SongLikesKey songLikesKey = new SongLikesKey();
+		songLikesKey.setSongid(songid);
+		songLikesKey.setUserid(userid);
+		songLikesService.selectByUserAndSong(songLikesKey);
+		// 查找记录是否存在
+		if(songLikesService.selectByUserAndSong(songLikesKey) != null) {
+			// 记录存在。原先已收藏，现取消收藏
+			songLikesService.deleteBySongLikesKey(songLikesKey);
+		} else {
+			// 记录不存在。原先未收藏，现收藏
+			songLikesService.insert(songLikesKey);
+			isCollect = 1;
+		}
+		// 根据isCollect的值显示收藏图片
+		session.setAttribute("isCollect", isCollect);
+		return "songDetail";
+	}
+	
+	
 	
 	
 	/**
 	 * 歌曲详情
 	 */
-	@RequestMapping("songDetail")
+	@RequestMapping("/songDetail")
 	public String songDetail() {
 		return "songDetail";
 	}

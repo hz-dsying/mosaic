@@ -36,6 +36,10 @@ public class GenresFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request=(HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
+		
+		List<Album> list = albumService.queryAllAlbum();
+		request.getSession().setAttribute("albumList", list);
+		
 		Object pageBean = request.getAttribute("pageBean");
 		if(pageBean==null) {
 			String currentPage = request.getParameter("currentPage");
@@ -46,10 +50,6 @@ public class GenresFilter implements Filter {
 			request.getSession().setAttribute("pageBean", pb);
 			request.getRequestDispatcher("/genres.jsp").forward(request, response);
 		}
-		
-		List<Album> list = albumService.queryAllAlbum();
-		request.getSession().setAttribute("albumList", list);
-		
 		
 		chain.doFilter(request, response);
 	}

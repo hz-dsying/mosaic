@@ -3,6 +3,7 @@ package com.dsy.main.service;
 import java.util.List;
 
 import com.dsy.main.pojo.User;
+import com.dsy.main.util.PageBean;
 
 public interface UserService {
 	/**
@@ -58,6 +59,22 @@ public interface UserService {
 	 * @return
 	 */
 	List<User> selectByName(String username);
+
+	/**
+	 * 根据id查找用户
+	 * @param userid
+	 * @return
+	 */
+	User selectByUserid(Integer userid);
+
+	/**
+	 * 后台管理分页查询用户
+	 * @param username
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	PageBean<User> findPageBean(String username, int currentPage, int pageSize);
 	
 
 }
