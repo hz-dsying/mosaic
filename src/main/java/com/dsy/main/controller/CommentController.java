@@ -1,7 +1,6 @@
 package com.dsy.main.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,16 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.dsy.main.dao.UserCommentLikesMapper;
 import com.dsy.main.pojo.Comment;
 import com.dsy.main.pojo.CommentVo;
 import com.dsy.main.pojo.Song;
-import com.dsy.main.pojo.User;
 import com.dsy.main.pojo.UserCommentLikesKey;
 import com.dsy.main.service.CommentService;
 import com.dsy.main.service.SongService;
 import com.dsy.main.service.UserCommentLikesService;
-import com.dsy.main.service.UserService;
 import com.dsy.main.util.PageBean;
 
 @Controller
@@ -30,8 +26,6 @@ public class CommentController {
 	private CommentService commentService;
 	@Autowired
 	private SongService songService;
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private UserCommentLikesService userCommentLikesService;
 	
@@ -112,7 +106,9 @@ public class CommentController {
 			userCommentLikesService.insert(userCommentLikesKey);
 		}
 		commentService.update(comment);
-		return "songDetail";
+		
+		
+		return "redirect:/songDetail?userid=" + userid + "&songid=" + comment.getSongid();
 	}
 	
 	@RequestMapping("/addComment")
@@ -122,8 +118,10 @@ public class CommentController {
 		comment.setSongid(songid);
 		Date date = new Date();
 		comment.setCommenttime(date);
+		comment.setCommentcontent(commentcontent);
+		comment.setLikescount(0);
 		commentService.insert(comment);
-		return "songDetail";
+		return "redirect:/songDetail?userid=" + userid + "&songid=" + songid;
 	}
 
 }

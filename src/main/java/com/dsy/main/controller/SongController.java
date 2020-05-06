@@ -84,7 +84,8 @@ public class SongController {
         //获得环境
         ServletContext context = request.getServletContext();
         //通过环境，输入应用相对路径，获得真实路径
-        String realPath = context.getRealPath("song" + song.getSongurl());
+//        String realPath = context.getRealPath("songs" + song.getSongurl());
+        String realPath = "D:\\java\\eclipse-workspace\\mosaic\\src\\main\\resources\\static\\songs" + song.getSongurl();
         System.out.println("realPath:"+realPath);
         InputStream is = new FileInputStream(realPath);
         ServletOutputStream os = response.getOutputStream();
@@ -259,6 +260,7 @@ public class SongController {
 	public void searchSong(String word, HttpServletResponse response) throws IOException {
 		word = new String(word.getBytes("ISO-8859-1"), "utf-8");
 		word = "%" + word + "%";
+		System.out.println("111111111" + word);
 		List<Song> list = songService.searchSongByWord(word);
 		Gson gson = new Gson();
 		String json = gson.toJson(list);
@@ -355,7 +357,9 @@ public class SongController {
 	 * 歌曲详情
 	 */
 	@RequestMapping("/songDetail")
-	public String songDetail() {
+	public String songDetail(int songid, HttpSession session) {
+		Song song = songService.selectBySongid(songid);
+		session.setAttribute("song", song);
 		return "songDetail";
 	}
 

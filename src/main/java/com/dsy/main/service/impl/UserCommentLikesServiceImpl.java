@@ -42,7 +42,7 @@ public class UserCommentLikesServiceImpl implements UserCommentLikesService {
 		UserCommentLikesExample example = new UserCommentLikesExample();
 		example.createCriteria().andCommentidEqualTo(userCommentLikesKey.getCommentid()).andUseridEqualTo(userCommentLikesKey.getUserid());
 		List<UserCommentLikesKey> list = userCommentLikesMapper.selectByExample(example );
-		if(list != null) {
+		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		return null;

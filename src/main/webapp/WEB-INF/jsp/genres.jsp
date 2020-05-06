@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en" class="app">
@@ -67,7 +66,7 @@
 						</a></li>
 					</c:if>
 					<c:if test="${!empty user}">
-						<li class="hidden-xs"><a href="${pageContext.request.contextPath}/profile.jsp"> <span>${user.username}</span>
+						<li class="hidden-xs"><a href="#"> <span>${user.username}</span>
 						</a></li>
 						<li class="hidden-xs"><a href="#"> <span>欢迎您</span>
 						</a></li>
@@ -134,11 +133,11 @@
 																<div class="item-overlay opacity r r-2x bg-black">
 																	<div class="center text-center m-t-n">
 																		<a
-																			href="${pageContext.request.contextPath }/songDetail?songid=${song.songid}"><i
+																			href="${pageContext.request.contextPath }/songDetail?songid=${song.songid}&userid=${user.userid}"><i
 																			class="fa fa-play-circle i-2x"></i></a>
 																	</div>
 																</div>
-																<a href="${pageContext.request.contextPath }/songDetail?songid=${song.songid}"><img
+																<a href="${pageContext.request.contextPath }/songDetail?songid=${song.songid}&userid=${user.userid}"><img
 																	src="${pageContext.request.contextPath }/img/${song.imgurl }"
 																	alt="" class="r r-2x img-full" style="height: 300px"></a>
 															</div>
@@ -192,43 +191,43 @@
 
 	</script>	
 	<script type="text/javascript">
-								$(function(){
-									$("#word").keyup(function(){
-										// 局部刷新，想要获得商品名，显示到input下面添加新的列表
-										$.get(
-											"${pageContext.request.contextPath}/searchSong",
-											{
-												"word": $("#word").val()
-											},
-											function(data){
-												$("#list").empty();
-												for (var i = 0 ;i < data.length; i++) {
-													if ( i > 7) {
-														break;
-													}
-													$("#list").append("<a href='${pageContext.request.contextPath }/songDetail?songid="+data[i].songid+"' ><div style='cursor:pointer' onmouseover='over(this)' onmouseout='out(this)' onclick='go(this)'>"+data[i].songname+"</div></a>");
-												}
-												$("#list").css("display", "block");
-											},
-											"json"
-										);
+		$(function(){
+			$("#word").keyup(function(){
+				// 局部刷新，想要获得商品名，显示到input下面添加新的列表
+				$.get(
+					"${pageContext.request.contextPath}/searchSong",
+					{
+						"word": $("#word").val()
+					},
+					function(data){
+						$("#list").empty();
+						for (var i = 0 ;i < data.length; i++) {
+							if ( i > 7) {
+								break;
+							}
+							$("#list").append("<a href='${pageContext.request.contextPath }/songDetail?userid=${user.userid}&songid="+data[i].songid+"' ><div style='cursor:pointer' onmouseover='over(this)' onmouseout='out(this)' onclick='go(this)'>"+data[i].songname+"</div></a>");
+						}
+						$("#list").css("display", "block");
+					},
+					"json"
+				);
 
-									}); 
-								});
-								function over(obj) {
-									$(obj).css("background-color", "gray");
-									}
-									function out(obj) {
-										$(obj).css("background-color", "white");
-									}
-									function go(obj) {
-										$("#word").val($(obj).html());
-										$("#list").css("display", "none");
-									}
-									function to(val) {
-								            $("#currentPage").val(parseInt($("#currentPage").val())+val);
-								            $("#page").submit();
-							        }
-							</script>
+			}); 
+		});
+		function over(obj) {
+			$(obj).css("background-color", "gray");
+			}
+			function out(obj) {
+				$(obj).css("background-color", "white");
+			}
+			function go(obj) {
+				$("#word").val($(obj).html());
+				$("#list").css("display", "none");
+			}
+			function to(val) {
+		            $("#currentPage").val(parseInt($("#currentPage").val())+val);
+		            $("#page").submit();
+	        }
+	</script>
 </body>
 </html>

@@ -43,15 +43,8 @@
 			<div class="logo">
 				<a href="#">MOSAIC</a>
 			</div>
-			<!-- <div class="social">
-                <li><a href="#"><span class="fa fa-facebook"></span></a></li>
-                <li><a href="#"><span class="fa fa-twitter"></span></a></li>
-                <li><a href="#"><span class="fa fa-linkedin"></span></a></li>
-                <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
-        </div> -->
 			<div class="clear"></div>
 		</div>
-		<!-- <div class="tlinks">Collect from <a href="http://www.cssmoban.com/"  title="网站模板">网站模板</a></div> -->
 		<div class="register-full">
 			<div class="register-left">
 				<div class="register">
@@ -59,12 +52,6 @@
 					<h1>MOSAIC</h1>
 					<h2>Music Share Platform</h2>
 					<p>欢迎访问MOSAIC音乐分享平台</p>
-					<!-- <div class="content3">
-					<ul>
-						<li><a class="" href="#"> New Project</a></li>
-						<li><a class="read" href="#"> Get Started</a></li>
-					</ul>
-				</div> -->
 				</div>
 			</div>
 			<div class="register-right">
@@ -140,12 +127,6 @@
 							<input type="radio" class="role" name="role" value="2" id="role_2" required=""><label for="role_2">会员</label>
 							<input type="radio" class="role" name="role" value="3" id="role_3" required=""><label for="role_3">管理员</label>
 							<br>
-							
-							<!-- <div class="login-check">
-								<label class="checkbox"><input type="checkbox"
-									name="checkbox" checked=""><i> </i> I Accept to the <a
-									href="#">Terms &amp; Conditions</a></label>
-							</div> -->
 							<input type="submit" value="Register">
 						</form>
 					</div>

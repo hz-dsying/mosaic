@@ -1,9 +1,7 @@
 package com.dsy.main.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -45,6 +43,9 @@ public class UserController {
 	@RequestMapping("/login")
 	public String login(String username, String password, HttpSession session) {
 		// 1.通过用户名和密码查找用户
+		if(userService.findByUsernameAndPwd(username, password) == null) {
+			return "redirect:/toLogin";
+		}
 		User user = userService.findByUsernameAndPwd(username, password);
 		// 2.将用户存入域中
 		session.setAttribute("user", user);

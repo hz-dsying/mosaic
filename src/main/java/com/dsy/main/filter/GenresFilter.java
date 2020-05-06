@@ -9,7 +9,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +19,6 @@ import com.dsy.main.service.AlbumService;
 import com.dsy.main.service.SongService;
 import com.dsy.main.util.PageBean;
 
-@WebFilter("/genres.jsp")
 public class GenresFilter implements Filter {
 	@Autowired
 	private SongService songService;
@@ -36,7 +34,6 @@ public class GenresFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request=(HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		
 		List<Album> list = albumService.queryAllAlbum();
 		request.getSession().setAttribute("albumList", list);
 		
@@ -48,7 +45,7 @@ public class GenresFilter implements Filter {
 			PageBean pb = songService.listSongsByType(currentPage, pageSize, type);
 			request.getSession().setAttribute("type", type);
 			request.getSession().setAttribute("pageBean", pb);
-			request.getRequestDispatcher("/genres.jsp").forward(request, response);
+			request.getRequestDispatcher("/toGenres").forward(request, response);
 		}
 		
 		chain.doFilter(request, response);

@@ -42,7 +42,7 @@ public class SongLikesServiceImpl implements SongLikesService {
 		SongLikesExample example = new SongLikesExample();
 		example.createCriteria().andUseridEqualTo(songLikesKey.getUserid()).andSongidEqualTo(songLikesKey.getSongid());
 		List<SongLikesKey> list = songLikesMapper.selectByExample(example);
-		if(list != null) {
+		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		return null;

@@ -9,7 +9,6 @@ import com.dsy.main.dao.UserMapper;
 import com.dsy.main.pojo.User;
 import com.dsy.main.pojo.UserExample;
 import com.dsy.main.service.UserService;
-import com.dsy.main.util.LoginException;
 import com.dsy.main.util.PageBean;
 
 @Service
@@ -25,7 +24,7 @@ public class UserServiceImpl implements UserService {
 		if(list != null && list.size() > 0) {
 			return list.get(0);
 		}else {
-			throw new LoginException("用户名/密码错误");
+			return null;
 		}
 	}
 
