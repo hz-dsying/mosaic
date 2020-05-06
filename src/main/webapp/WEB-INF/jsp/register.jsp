@@ -236,22 +236,6 @@
 		});
 	</script>
 
-<!-- 	<script>
-		$(function() {
-			$("#username").onblur(function() {
-				$.post("${pageContext.request.contextPath}/checkUsername", {
-					"username" : $("#username").val()
-				}, function(data) {
-					if (data.msg!=null) { //校验不通过，已存在
-						alert(data.msg);
-					} else{
-						alert("通过");
-					}
-				}, "json");
-			});
-		});
-	</script> -->
-
 </body>
 <!-- //body ends -->
 </html>

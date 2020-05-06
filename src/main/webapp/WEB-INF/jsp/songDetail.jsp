@@ -23,7 +23,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- //fonts -->
 </head>
   <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div id="navbar" class="navbar-collapse collapse">
@@ -52,7 +51,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="clearfix"> </div>
       </div>
     </nav>
-
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<div class="show-top-grids">
 				<div class="col-sm-8 single-left">
@@ -62,8 +60,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<h5>歌手：${song.singer }</h5>
 						</div>
 						<div class="video-grid">
-							<audio controls>
-								<source src="/songs${song.songurl }"></source>
+							<audio controls="controls" >
+								<source src="songs${song.songurl }" ></source>
 							</audio>
 							<br>
 							<br>
@@ -115,34 +113,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div>
 								</div>
 							</c:forEach>
-							
-							
-
-							
-				<!-- 			<div class="media">
-								<h5>Mark Johnson</h5>
-								<div class="media-left">
-									<a href="#">
-										
-									</a>
-								</div>
-								<div class="media-body">
-									<p>Maecenas ultricies rhoncus tincidunt maecenas imperdiet ipsum id ex pretium hendrerit maecenas imperdiet ipsum id ex pretium hendrerit</p>
-									<span>View all posts by :<a href="#"> Admin </a></span>
-								</div>
-							</div> -->
-
 						</div>
 					</div>
 				</div>
 			
 				<div class="clearfix"> </div>
 			</div>
-
 		</div>
 		<div class="clearfix"> </div>
-
-
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

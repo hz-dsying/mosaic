@@ -108,12 +108,6 @@
 																style="width: 100%">${album.albumname }</button>
 														</a>
 													</c:forEach>
-													
-													<!-- <a href="genres.html">
-														<button name="type" value="为情所困" class="list-group-item"
-															style="width: 100%">为情所困</button>
-													</a>  -->
-
 												</form>
 
 											</div>
