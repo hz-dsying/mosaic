@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dsy.main.pojo.Album;
+import com.dsy.main.pojo.Song;
 import com.dsy.main.service.AlbumService;
 import com.dsy.main.service.SongService;
 import com.dsy.main.util.PageBean;
@@ -42,7 +43,7 @@ public class GenresFilter implements Filter {
 			String currentPage = request.getParameter("currentPage");
 			String type = "所有歌曲";
 			String pageSize = "18";
-			PageBean pb = songService.listSongsByType(currentPage, pageSize, type);
+			PageBean<Song> pb = songService.listSongsByType(currentPage, pageSize, type);
 			request.getSession().setAttribute("type", type);
 			request.getSession().setAttribute("pageBean", pb);
 			request.getRequestDispatcher("/toGenres").forward(request, response);
