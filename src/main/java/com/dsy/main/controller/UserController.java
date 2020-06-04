@@ -57,8 +57,8 @@ public class UserController {
 		}else {
 			// 普通用户和会员跳转首页
 //			return "genres";
-			return "redirect:/listAlbum";
-//			return "redirect:/toGenres";
+//			return "redirect:/listAlbum";
+			return "redirect:/toGenres";
 		}
 	}
 	

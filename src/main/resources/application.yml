@@ -1,15 +1,18 @@
 spring:
+  #Mysql连接配置
   datasource:
     url: jdbc:mysql://localhost:3306/mosaic?serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #SpringMVC视图解析器配置
   mvc:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
-#添加mybatis别名设置
-#添加mybatis映射文件扫描
+
 mybatis:
+  #添加mybatis别名设置
   type-aliases-package: com.dsy.main.pojo
+  #添加mybatis映射文件扫描
   mapper-locations: classpath:mapper/*.xml
